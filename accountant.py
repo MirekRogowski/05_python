@@ -17,7 +17,7 @@ while True:
              temp_log = []
              if temp_date == "saldo":
                   temp_log.append(temp_date)
-                  temp_date = int(input("Podaj wartość salda: "))
+                  temp_date = input("Podaj wartość salda: ")
                   balance += int(temp_date)
                   temp_log.append(temp_date)
                   temp_date = input("Komentarz: ")
@@ -29,9 +29,50 @@ while True:
                   print(temp_date)
                   print(f"dane tymczasowe {len(temp_date)}, {temp_date}")
                   print(logs)
+                  continue
+             elif temp_date == "sprzedaz":
+                  temp_log.append(temp_date)
+                  temp_date = input("Co sprzedajesz: ")
+                  #while do testowania magazynu
+                  temp_log.append(temp_date)
+                  temp_date = input("Cena produktu: ")
+                  temp_log.append(temp_date)
+                  temp_quantity = input("Ile produktów: ")
+                  temp_log.append(temp_quantity)
+                  print(f"Balance przed {balance}")
+                  print(f"Balance po {balance}")
+                  balance += int(temp_date)*int(temp_quantity)
+                  print(f"Balance po {balance}")
+
+                  print(f"Dane tymczasow: {temp_log}")
+                  logs.append(temp_log)
+                  print(f"Saldo wynosi: {balance}")
+
+                  print(temp_date)
+                  print(f"dane tymczasowe {len(temp_date)}, {temp_date}")
+                  print(logs)
+                  continue
+             elif temp_date == "zakup":
+                  temp_log.append(temp_date)
+                  temp_date = input("Podaj wartość salda: ")
+                  print(f"Balance przed {balance}")
+                  balance += int(temp_date)
+                  print(f"Balance po {balance}")
+
+                  temp_log.append(temp_date)
+                  temp_date = input("Komentarz: ")
+                  temp_log.append(temp_date)
+                  print(f"Dane tymczasow: {temp_log}")
+                  logs.append(temp_log)
+                  print(f"Saldo wynosi: {balance}")
+
+                  print(temp_date)
+                  print(f"dane tymczasowe {len(temp_date)}, {temp_date}")
+                  print(logs)
+             elif temp_date == "stop":
+                  print(f"Saldo wynosi: {balance}")
+                  print("Do widzenia")
                   exit()
-
-
 
                # print(logs)
                # print(f"Saldo: {balance}")
