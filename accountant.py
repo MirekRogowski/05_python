@@ -32,29 +32,36 @@ while True:
           print(f"\nWartość salda: {balance} \n")
           continue
      elif action == "sprzedaz":
+          #empty warehause
           if not warehouse :
-               print("\nMagazyn jest pusty proszeę zakupić tpawr.\n")
+               print("\nMagazyn jest pusty proszeę zakupić toawr.\n")
                continue
-          prd_id = input("Sprzedaż: ")
-     #    Sprawdzenie magazynu
-          if not warehouse :
-               print("\nProsze wybrać akcję - zakup - \n")
-               continue
-          if not warehouse.get(action,0) :
-               print("Brak towaru  w magazanie, proszę wybrać inny towar :  ")
+          prd_id = input("Nazwa towaru: ")
+          if not prd_id in warehouse:
+               print("\nBrak towaru  w magazanie, proszę towar  wybrać z poniższej listy:  ")
                for key in warehouse:
-                    print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
+                    print(f"{key} - {warehouse[key]} sztuk" )
                continue
+
+     #    Sprawdzenie magazymanu
+          # if not warehouse.get(action,0) :
+          #      print("\nBrak towaru  w magazanie, proszę twowr z poniższej listy:  ")
+          #      for key in warehouse:
+          #           print(f"{key} - ilość: - {warehouse[key]}" )
+          #      continue
           prd_prize = int(input("Cena produktu: "))
           prd_qty = int(input("Ile produktów: "))
-          #usnięcie produktu ze stanu magazynu
-          dict_qty = warehouse[prd_id] 
-          dict_qty -= prd_qty 
+          #remove item from warehouse
+          if (warehouse[prd_id] - prd_qty) < 0:
+               print(f"Chcesz sprzedać {prd_qty} {prd_id} w magazynie tylko {warehouse[prd_id]}/n ")
+          warehouse[prd_id] -= prd_qty   
           balance += prd_prize * prd_qty
           logs.append([action, prd_id, prd_prize, prd_qty])
           print(f"\nSaldo wynosi: {balance}\n")
           continue
      elif action == "zakup":
+          if balance <= 0:
+               print("\nSaldo wynosi: 0. Nie można kupić towaru\n ")          
           prd_id = input("Nazwa towaru: ")
           prd_prize = int(input("Cena produktu: "))
           prd_qty = int(input("Ile produktów: "))
@@ -68,38 +75,31 @@ while True:
           else:
                #add item to warehouse
                warehouse[prd_id] = prd_qty
-          # magazyn po k
           logs.append([action, prd_id, prd_prize, prd_qty])
-          print(f"/nSaldo wynosi: {balance}/n")
+          print(f"\nSaldo wynosi: {balance}\n")
           continue
      elif action == "konto":
-
-          print(f"/nSaldo wynosi: {balance}/n")
-  
+          print(f"\nSaldo wynosi: {balance}\n")
           continue
      elif action == "magazyn":
           if warehouse:
-               print("*"*width)
+               print("Towar w magazynie.")
                for key in warehouse:
-                    print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
-               print("*"*width)
+                    print(f"\n {key} - {warehouse[key]} sztuk\n" )
           else:
-               print("*"*width)
-               print("Magazyn pusty")
-               print("*"*width)
+               print("\nMagazyn pusty.\n")
+          print(f"\nSaldo wynosi: {balance}\n")
           continue
      elif action == "przeglad":
           if logs:
-               print("*"*width)
                for count, value in enumerate(logs):
                     print(f"Log nr {count} {value}")
-               print("*"*width)
           else:
-               print("*"*width)
-               print("Brak logu")
-               print("*"*width)
+               print("\nBrak logu\n")
+
           continue
      elif action == "stop":
-          print("Do widzenia")
+          print("\nKoniec.")
+          print(f"\nSaldo wynosi: {balance}\n")
           exit()
 
