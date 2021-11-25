@@ -1,4 +1,7 @@
 import sys
+import os
+width, height =os.get_terminal_size()
+width = width - 1
 balance =0
 warehouse = {}
 logs = []
@@ -14,7 +17,7 @@ while True:
              logs.append(sys.argv[1:])
              balance = int(sys.argv[2])
         while True:
-             print(f"Dozwolone akcje: {availabe_actions}")
+             print(f"Dozwolone akcje: {availabe_actions}\n")
              temp_date = input("Jaka akcja: ")
              temp_log = []
              if temp_date == "saldo":
@@ -24,18 +27,34 @@ while True:
                   temp_log.append(temp_date)
                   temp_date = input("Komentarz: ")
                   temp_log.append(temp_date)
-                  print(f"Dane tymczasow: {temp_log}")
                   logs.append(temp_log)
-                  print(f"Saldo wynosi: {balance}")
-
-                  print(temp_date)
-                  print(f"dane tymczasowe {len(temp_date)}, {temp_date}")
-                  print(logs)
                   continue
              elif temp_date == "sprzedaz":
+                  if not bool(warehouse) :
+                       print("*"*width)
+                       print("Magazyn jest pusty")
+                       print("prosze wybrać akcję -zakup-")
+                       print("*"*width)
+                       continue
                   temp_log.append(temp_date)
-                  temp_date = input("Sprzedaż: ")
-                  #while do testowania magazynu
+                  temp_date = input("Sprzedaż 1 krok: ")
+                  print("temp date", temp_date)
+               #    temp_mag =warehouse.get(temp_date,0)
+               #    print("Magazyn", temp_mag)
+                  if not bool(warehouse) :
+                       print("prosze wybrać akcję -zakup-")
+                       continue
+                  if not warehouse.get(temp_date,0) :
+                       print("Brak towaru  w magazanie, proszę wybrać inny towar ")
+                       print("W magazynie są dostępne: ")
+                       for key in warehouse:
+                            print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
+                       continue
+
+                 
+
+
+        
                   temp_log.append(temp_date)
                   temp_date = input("Cena produktu: ")
                   temp_log.append(temp_date)
@@ -63,40 +82,53 @@ while True:
                   temp_quantity = input("Ile produktów: ")
                   temp_log.append(temp_quantity)
                   balance -= int(temp_prize)*int(temp_quantity)
+               #    while (balance + int(temp_prize)*int(temp_quantity))< 0 :
+               #         print
+                       
+
 
                   if temp_log[1] not in warehouse:
                        warehouse[temp_log[1]] = temp_log[2], temp_log[3]
                   else:
-                       print("!"*80)
+                    #    print("!"*80)
                        di_prize, di_qty = warehouse[temp_log[1]] 
-                       di_prize += temp_prize
-                       di_qty  += temp_quantity
-                       warehouse[temp_log[1]] = di_prize,di_qty 
-
-                       print(f"Wartosći slownik", di_prize, di_qty)
-                       print("!"*80)
-                  for key in warehouse:
-                       print(f"Klucz - {key}. Wartość: - {warehouse[key]}" )
-                  print(f"Magazyn -zawartość: {warehouse}")
-                  
-               #    print(f"Wartości w magazynie 932187493 {warehouse.keys()}")
-
+                       new_prize = int(di_prize) + int(temp_prize)
+                       new_qty = int(di_qty)  + int(temp_quantity)
+                       warehouse[temp_log[1]] = str(new_prize), str(new_qty) 
+                    #    print(f"Wartosći slownik", new_prize, new_qty)
+                    #    print("!"*80)
+               #    for key in warehouse:
+               #         print(f"Klucz - {key}. Wartość: - {warehouse[key]}\n" )
                   logs.append(temp_log)
-                  print(f"Saldo wynosi 02: {balance}")
-
-                  print(f"dane tymczasowe 03: ile elementów {temp_log}.")
-                  print(logs)
+                  print("*"*width)
                   continue
              elif temp_date == "konto":
+                  print("*"*width)
                   print(f"Saldo wynosi: {balance}")
+                  print("*"*width)
                   continue
              elif temp_date == "magazyn":
                   if warehouse:
-                       print(f"Magazyn -zawartość: {warehouse}")
+                       print("*"*width)
+                       for key in warehouse:
+                            print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
+                       print("*"*width)
                   else:
+                       print("*"*width)
                        print("Magazyn pusty")
+                       print("*"*width)
                   continue
-
+             elif temp_date == "przeglad":
+                  if logs:
+                       print("*"*width)
+                       for count, value in enumerate(logs):
+                            print(f"Log nr {count} {value}")
+                       print("*"*width)
+                  else:
+                       print("*"*width)
+                       print("Brak logu")
+                       print("*"*width)
+                  continue
              elif temp_date == "stop":
                   print("Do widzenia")
                   exit()
