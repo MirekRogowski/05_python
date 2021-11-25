@@ -6,151 +6,100 @@ balance =0
 warehouse = {}
 logs = []
 
-start_actions = ["saldo", "sprzedaz","zakup"]   
-print(f"Dozwolone akcje: {start_actions }")
                             
 availabe_actions =["saldo", "sprzedaz","zakup","konto","magazyn","przeglad","stop"] 
 
+
+if (len(sys.argv) == 4 and sys.argv[1]=="saldo") or (len(sys.argv) == 2 and sys.argv[1]=="saldo"):
+     logs.append(sys.argv[1:])
+     balance = int(sys.argv[2])
+elif (len(sys.argv) == 5 and sys.argv[1]=="sprzedaz") or warehouse :
+     print("\nMagazyn jest pusty\n")
+     exit()
+elif (len(sys.argv) == 5 and sys.argv[1]=="zakup") or balance :
+     print("\nBrak salda\n")
+     exit()
+
 while True:
-    if (len(sys.argv) == 4 and sys.argv[1]=="saldo") or (len(sys.argv) == 2 and sys.argv[1]=="saldo"):
-        if len(sys.argv) == 4:
-             
-             logs.append(sys.argv[1:])
-             balance = int(sys.argv[2])
-        while True:
-             print(f"Dozwolone akcje: {availabe_actions}\n")
-             temp_date = input("Wybierz akcje: ")
-             temp_log = []
-             if temp_date == "saldo":
-                  temp_log.append(temp_date)
-                  temp_date = input("Podaj wartość salda: ")
-                  balance += int(temp_date)
-                  temp_log.append(temp_date)
-                  temp_date = input("Komentarz: ")
-                  temp_log.append(temp_date)
-                  logs.append(temp_log)
-                  continue
-             elif temp_date == "sprzedaz":
-                  if not bool(warehouse) :
-                       print("*"*width)
-                       print("Magazyn jest pusty")
-                       print("prosze wybrać akcję -zakup-")
-                       print("*"*width)
-                       continue
-                  temp_log.append(temp_date)
-                  temp_date = input("Sprzedaż: ")
-                  print("temp date", temp_date)
-               #    Sprawdzenie magazynu
-                  if not bool(warehouse) :
-                       print("*"*width)
-                       print("prosze wybrać akcję -zakup-")
-                       print("*"*width)
-                       continue
-                  if not warehouse.get(temp_date,0) :
-                       print("*"*width)
-                       print("Brak towaru  w magazanie, proszę wybrać inny towar ")
-                       print("W magazynie są dostępne: ")
-                       for key in warehouse:
-                            print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
-                       print("*"*width)
-                       continue
+     print(f"Dozwolone akcje: {availabe_actions}\n")
+     action = input("Wybierz akcje: ")
+     temp_log = []
+     if action == "saldo":
+          new_balance = int(input("Podaj wartość salda: "))
+          balance += new_balance
+          comments = input("Komentarz: ")
+          logs.append([action, new_balance, comments])
+          print(f"\nWartość salda: {balance} \n")
+          continue
+     elif action == "sprzedaz":
+          if not warehouse :
+               print("\nMagazyn jest pusty proszeę zakupić tpawr.\n")
+               continue
+          prd_id = input("Sprzedaż: ")
+     #    Sprawdzenie magazynu
+          if not warehouse :
+               print("\nProsze wybrać akcję - zakup - \n")
+               continue
+          if not warehouse.get(action,0) :
+               print("Brak towaru  w magazanie, proszę wybrać inny towar :  ")
+               for key in warehouse:
+                    print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
+               continue
+          prd_prize = int(input("Cena produktu: "))
+          prd_qty = int(input("Ile produktów: "))
+          #usnięcie produktu ze stanu magazynu
+          dict_qty = warehouse[prd_id] 
+          dict_qty -= prd_qty 
+          balance += prd_prize * prd_qty
+          logs.append([action, prd_id, prd_prize, prd_qty])
+          print(f"\nSaldo wynosi: {balance}\n")
+          continue
+     elif action == "zakup":
+          prd_id = input("Nazwa towaru: ")
+          prd_prize = int(input("Cena produktu: "))
+          prd_qty = int(input("Ile produktów: "))
+          if prd_prize * prd_qty > balance:
+               print(f"\nNie mozna dokonac zakupu. Za małe saldo: {balance}\n")
+               continue
+          balance -= prd_prize * prd_qty
+          if prd_id in warehouse:
+               #add quntity to warehouse
+               warehouse[prd_id] += prd_qty          
+          else:
+               #add item to warehouse
+               warehouse[prd_id] = prd_qty
+          # magazyn po k
+          logs.append([action, prd_id, prd_prize, prd_qty])
+          print(f"/nSaldo wynosi: {balance}/n")
+          continue
+     elif action == "konto":
 
-                  temp_log.append(temp_date)
-                  temp_prize = input("Cena produktu: ")
-                  temp_log.append(temp_prize)
-                  temp_quantity = input("Ile produktów: ")
-                  temp_log.append(temp_quantity)
-                  #usnięcie produktu ze stanu magazynu
-                  di_prize, di_qty = warehouse[temp_log[1]] 
-                  new_prize = int(di_prize) - int(temp_prize)
-                  new_qty = int(di_qty)  - int(temp_quantity)
-                  warehouse[temp_log[1]] = str(new_prize), str(new_qty) 
-
-                  balance += int(temp_prize)*int(temp_quantity)
-                  logs.append(temp_log)
-                  print(f"Saldo wynosi: {balance}")
-                  print("*"*width)
-                  
-                  continue
-             elif temp_date == "zakup":
-                  temp_log.append(temp_date)
-                  temp_date = input("Nazwa towaru ")
-                  temp_log.append(temp_date)
-                  temp_prize = input("Cena produktu: ")
-                  temp_log.append(temp_prize)
-                  temp_quantity = input("Ile produktów: ")
-                  temp_log.append(temp_quantity)
-                  if balance <= int(temp_prize)*int(temp_quantity):
-                       print("Nie mozna dokonac zakupu")
-                       print("*"*width)
-                       continue
-
-                  balance -= int(temp_prize)*int(temp_quantity)
-               #  sprwdzenie co jest na magazynie 
-                  if temp_log[1] not in warehouse:
-                       warehouse[temp_log[1]] = temp_log[2], temp_log[3]
-                  else:
-                    # magazyn po k
-                       di_prize, di_qty = warehouse[temp_log[1]] 
-                       new_prize = int(di_prize) + int(temp_prize)
-                       new_qty = int(di_qty)  + int(temp_quantity)
-                       warehouse[temp_log[1]] = str(new_prize), str(new_qty) 
-                  logs.append(temp_log)
-                  print("*"*width)
-                  continue
-             elif temp_date == "konto":
-                  print("*"*width)
-                  print(f"Saldo wynosi: {balance}")
-                  print("*"*width)
-                  continue
-             elif temp_date == "magazyn":
-                  if warehouse:
-                       print("*"*width)
-                       for key in warehouse:
-                            print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
-                       print("*"*width)
-                  else:
-                       print("*"*width)
-                       print("Magazyn pusty")
-                       print("*"*width)
-                  continue
-             elif temp_date == "przeglad":
-                  if logs:
-                       print("*"*width)
-                       for count, value in enumerate(logs):
-                            print(f"Log nr {count} {value}")
-                       print("*"*width)
-                  else:
-                       print("*"*width)
-                       print("Brak logu")
-                       print("*"*width)
-                  continue
-             elif temp_date == "stop":
-                  print("Do widzenia")
-                  exit()
-
-    elif len(sys.argv) > 1 and sys.argv[1]== "sprzedaz":
-         print("Dopisz sprzedaz") 
-         exit()   
-    elif len(sys.argv) > 1 and sys.argv[1]== "zakup":
-         print("Dopisz zakup") 
-         exit()
-    elif len(sys.argv) > 1 and sys.argv[1]== "konto":
-         print("Dopisz konto") 
-         exit()
-    elif len(sys.argv) > 1 and sys.argv[1]== "magazyn":
-         print("Dopisz magazyn") 
-         exit()
-    elif len(sys.argv) > 1 and sys.argv[1]== "przeglad":
-         print("Dopisz przeglad") 
-         exit()
-    elif len(sys.argv) > 1 and sys.argv[1]== "stop":
-         print("Dopisz stop") 
-         exit()
-    else:
-        print("Wpisz prawidłową akcje")
-        exit()
-
-   
+          print(f"/nSaldo wynosi: {balance}/n")
   
+          continue
+     elif action == "magazyn":
+          if warehouse:
+               print("*"*width)
+               for key in warehouse:
+                    print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
+               print("*"*width)
+          else:
+               print("*"*width)
+               print("Magazyn pusty")
+               print("*"*width)
+          continue
+     elif action == "przeglad":
+          if logs:
+               print("*"*width)
+               for count, value in enumerate(logs):
+                    print(f"Log nr {count} {value}")
+               print("*"*width)
+          else:
+               print("*"*width)
+               print("Brak logu")
+               print("*"*width)
+          continue
+     elif action == "stop":
+          print("Do widzenia")
+          exit()
 
