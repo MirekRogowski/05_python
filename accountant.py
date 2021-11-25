@@ -14,11 +14,12 @@ availabe_actions =["saldo", "sprzedaz","zakup","konto","magazyn","przeglad","sto
 while True:
     if (len(sys.argv) == 4 and sys.argv[1]=="saldo") or (len(sys.argv) == 2 and sys.argv[1]=="saldo"):
         if len(sys.argv) == 4:
+             
              logs.append(sys.argv[1:])
              balance = int(sys.argv[2])
         while True:
              print(f"Dozwolone akcje: {availabe_actions}\n")
-             temp_date = input("Jaka akcja: ")
+             temp_date = input("Wybierz akcje: ")
              temp_log = []
              if temp_date == "saldo":
                   temp_log.append(temp_date)
@@ -37,68 +38,63 @@ while True:
                        print("*"*width)
                        continue
                   temp_log.append(temp_date)
-                  temp_date = input("Sprzedaż 1 krok: ")
+                  temp_date = input("Sprzedaż: ")
                   print("temp date", temp_date)
-               #    temp_mag =warehouse.get(temp_date,0)
-               #    print("Magazyn", temp_mag)
+               #    Sprawdzenie magazynu
                   if not bool(warehouse) :
+                       print("*"*width)
                        print("prosze wybrać akcję -zakup-")
+                       print("*"*width)
                        continue
                   if not warehouse.get(temp_date,0) :
+                       print("*"*width)
                        print("Brak towaru  w magazanie, proszę wybrać inny towar ")
                        print("W magazynie są dostępne: ")
                        for key in warehouse:
                             print(f"Towar - {key}. Wartość: - {warehouse[key]}" )
+                       print("*"*width)
                        continue
 
-                 
-
-
-        
-                  temp_log.append(temp_date)
-                  temp_date = input("Cena produktu: ")
-                  temp_log.append(temp_date)
-                  temp_quantity = input("Ile produktów: ")
-                  temp_log.append(temp_quantity)
-                  temp_log.append(str(balance))
-                  balance += int(temp_date)*int(temp_quantity)
-                  temp_log.append(str(balance))
-                  print(f"Dane tymczasow: {temp_log}")
-                  #dane poprawne
-                  logs.append(temp_log)
-                  print(f"Saldo wynosi: {balance}")
-
-                  print(temp_date)
-                  print(f"dane tymczasowe {len(temp_date)}, {temp_date}")
-                  print(logs)
-                  continue
-             elif temp_date == "zakup":
-                  temp_log.append(temp_date)
-                  temp_date = input("Nazwa towaru ")
-                  #while do testowania magazynu
                   temp_log.append(temp_date)
                   temp_prize = input("Cena produktu: ")
                   temp_log.append(temp_prize)
                   temp_quantity = input("Ile produktów: ")
                   temp_log.append(temp_quantity)
+                  #usnięcie produktu ze stanu magazynu
+                  di_prize, di_qty = warehouse[temp_log[1]] 
+                  new_prize = int(di_prize) - int(temp_prize)
+                  new_qty = int(di_qty)  - int(temp_quantity)
+                  warehouse[temp_log[1]] = str(new_prize), str(new_qty) 
+
+                  balance += int(temp_prize)*int(temp_quantity)
+                  logs.append(temp_log)
+                  print(f"Saldo wynosi: {balance}")
+                  print("*"*width)
+                  
+                  continue
+             elif temp_date == "zakup":
+                  temp_log.append(temp_date)
+                  temp_date = input("Nazwa towaru ")
+                  temp_log.append(temp_date)
+                  temp_prize = input("Cena produktu: ")
+                  temp_log.append(temp_prize)
+                  temp_quantity = input("Ile produktów: ")
+                  temp_log.append(temp_quantity)
+                  if balance <= int(temp_prize)*int(temp_quantity):
+                       print("Nie mozna dokonac zakupu")
+                       print("*"*width)
+                       continue
+
                   balance -= int(temp_prize)*int(temp_quantity)
-               #    while (balance + int(temp_prize)*int(temp_quantity))< 0 :
-               #         print
-                       
-
-
+               #  sprwdzenie co jest na magazynie 
                   if temp_log[1] not in warehouse:
                        warehouse[temp_log[1]] = temp_log[2], temp_log[3]
                   else:
-                    #    print("!"*80)
+                    # magazyn po k
                        di_prize, di_qty = warehouse[temp_log[1]] 
                        new_prize = int(di_prize) + int(temp_prize)
                        new_qty = int(di_qty)  + int(temp_quantity)
                        warehouse[temp_log[1]] = str(new_prize), str(new_qty) 
-                    #    print(f"Wartosći slownik", new_prize, new_qty)
-                    #    print("!"*80)
-               #    for key in warehouse:
-               #         print(f"Klucz - {key}. Wartość: - {warehouse[key]}\n" )
                   logs.append(temp_log)
                   print("*"*width)
                   continue
