@@ -1,7 +1,4 @@
 import sys
-import os
-width, height =os.get_terminal_size()
-width = width - 1
 balance =0
 warehouse = {}
 logs = []
@@ -18,7 +15,7 @@ elif (len(sys.argv) == 5 and sys.argv[1]=="zakup") or balance :
      print("\nBrak salda\n")
      exit()
 while True:
-     print(f"Dozwolone akcje: {availabe_actions}\n")
+     print(f"\nDozwolone akcje: {availabe_actions}\n")
      action = input("Wybierz akcje: ")
      temp_log = []
      if action == "saldo":
@@ -86,14 +83,13 @@ while True:
           first = int(input("Podaj nr pierwszej akcji: "))
           last = int(input("Podaj nr ostaniej akcji: "))
           print("\n")
-          if first < 1:
+          if first < 1 or first > len(logs):
                first = 1
-          if last > len(logs):
+          if last > len(logs) or last < 1:
                last = len(logs)
           while first <= last:
                print(f"Akcja nr {first} - {logs[first-1]}")
                first += 1
-          
           continue
      elif action == "stop":
           print("\nKoniec.")
