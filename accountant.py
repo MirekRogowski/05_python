@@ -3,19 +3,9 @@ balance =0
 warehouse = {}
 logs = []
                             
-availabe_actions =["saldo", "sprzedaz","zakup","konto","magazyn","przeglad","stop"] 
+availabe_actions = ["saldo", "sprzedaz", "zakup", "stop", "konto", "magazyn", "przeglad"] 
 
-if (len(sys.argv) == 4 and sys.argv[1]=="saldo") or (len(sys.argv) == 2 and sys.argv[1]=="saldo"):
-     logs.append(sys.argv[1:])
-     balance = int(sys.argv[2])
-elif (len(sys.argv) == 5 and sys.argv[1]=="sprzedaz") or warehouse :
-     print("\nMagazyn jest pusty\n")
-     exit()
-elif (len(sys.argv) == 5 and sys.argv[1]=="zakup") or balance :
-     print("\nBrak salda\n")
-     exit()
 while True:
-     print(f"\nDozwolone akcje: {availabe_actions}\n")
      action = input("Wybierz akcje: ")
      temp_log = []
      if action == "saldo":
@@ -23,7 +13,6 @@ while True:
           balance += new_balance
           comments = input("Komentarz: ")
           logs.append([action, new_balance, comments])
-          print(f"\nWartość salda: {balance} \n")
           continue
      elif action == "sprzedaz":
           #empty warehause
@@ -45,7 +34,6 @@ while True:
           warehouse[prd_id] -= prd_qty   
           balance += prd_prize * prd_qty
           logs.append([action, prd_id, prd_prize, prd_qty])
-          print(f"\nSaldo wynosi: {balance}\n")
           continue
      elif action == "zakup":
           if balance <= 0:
@@ -64,35 +52,65 @@ while True:
                #add item to warehouse
                warehouse[prd_id] = prd_qty
           logs.append([action, prd_id, prd_prize, prd_qty])
-          print(f"\nSaldo wynosi: {balance}\n")
-          continue
-     elif action == "konto":
-          print(f"\nSaldo wynosi: {balance}\n")
-          continue
-     elif action == "magazyn":
-          if warehouse:
-               print("\nTowar w magazynie.\n")
-               for key in warehouse:
-                    print(f"{key} - {warehouse[key]} sztuk" )
-          else:
-               print("\nMagazyn pusty.\n")
-          print(f"\nSaldo wynosi: {balance}\n")
-          continue
-     elif action == "przeglad":
-          print(f"Liczba logów: {len(logs)} ")
-          first = int(input("Podaj nr pierwszej akcji: "))
-          last = int(input("Podaj nr ostaniej akcji: "))
-          print("\n")
-          if first < 1 or first > len(logs):
-               first = 1
-          if last > len(logs) or last < 1:
-               last = len(logs)
-          while first <= last:
-               print(f"Akcja nr {first} - {logs[first-1]}")
-               first += 1
           continue
      elif action == "stop":
-          print("\nKoniec.")
-          print(f"\nSaldo wynosi: {balance}\n")
-          exit()
+          logs.append([action])
+          break
+     else:
+          print(f"Dostępne akcje: {availabe_actions[:3]}")
 
+if (len(sys.argv) == 4 and sys.argv[1]=="saldo") or (len(sys.argv) == 2 and sys.argv[1]=="saldo"):
+     logs.append(sys.argv[1:])
+     # print(f"\nSaldo wynosi: {balance}\n")
+     for x in logs:
+          for y in x:
+               print(y)
+elif (len(sys.argv) == 5 and sys.argv[1]=="sprzedaz") or warehouse :
+     logs.append(sys.argv[1:])
+     for x in logs:
+          for y in x:
+               print(y)
+elif (len(sys.argv) == 5 and sys.argv[1]=="zakup"):
+     logs.append(sys.argv[1:])
+     for x in logs:
+          for y in x:
+               print(y)
+
+     
+
+
+
+     # elif action == "konto":
+     #      print(f"\nSaldo wynosi: {balance}\n")
+     #      continue
+     # elif action == "magazyn":
+     #      if warehouse:
+     #           print("\nTowar w magazynie.\n")
+     #           for key in warehouse:
+     #                print(f"{key} - {warehouse[key]} sztuk" )
+     #      else:
+     #           print("\nMagazyn pusty.\n")
+     #      print(f"\nSaldo wynosi: {balance}\n")
+     #      continue
+     # elif action == "przeglad":
+     #      print(f"Liczba logów: {len(logs)} ")
+     #      first = int(input("Podaj nr pierwszej akcji: "))
+     #      last = int(input("Podaj nr ostaniej akcji: "))
+     #      print("\n")
+     #      if first < 1 or first > len(logs):
+     #           first = 1
+     #      if last > len(logs) or last < 1:
+     #           last = len(logs)
+     #      while first <= last:
+     #           print(f"Akcja nr {first} - {logs[first-1]}")
+     #           first += 1
+     #      continue
+# if (len(sys.argv) == 5 and sys.argv[1]=="sprzedaz") or warehouse :
+#      print("\nMagazyn jest pusty\n")
+#      exit()
+# elif (len(sys.argv) == 5 and sys.argv[1]=="zakup") or balance :
+#      print("\nBrak salda\n")
+#      exit()
+# elif (len(sys.argv) == 4 and sys.argv[1]=="saldo") or (len(sys.argv) == 2 and sys.argv[1]=="saldo"):
+#      logs.append(sys.argv[1:])
+#      balance = int(sys.argv[2])
