@@ -6,7 +6,7 @@ logs = []
 availabe_actions = ["saldo", "sprzedaz", "zakup", "stop", "konto", "magazyn", "przeglad"] 
 
 while True:
-     action = input("Wybierz akcje: ")
+     action = input("Wybierz akcje: \n")
      temp_log = []
      if action == "saldo":
           new_balance = int(input("Podaj wartość salda: "))
@@ -57,60 +57,66 @@ while True:
           logs.append([action])
           break
      else:
-          print(f"Dostępne akcje: {availabe_actions[:3]}")
-
+          print(f"\nDostępne akcje: {availabe_actions[:3]}")
+          print("\nNiedozwolna akcja")
+          exit("exit")
 if (len(sys.argv) == 4 and sys.argv[1]=="saldo") or (len(sys.argv) == 2 and sys.argv[1]=="saldo"):
      logs.append(sys.argv[1:])
-     # print(f"\nSaldo wynosi: {balance}\n")
-     for x in logs:
-          for y in x:
-               print(y)
-elif (len(sys.argv) == 5 and sys.argv[1]=="sprzedaz") or warehouse :
+     # add balance
+     balance += int(sys.argv[2])
+     #print logs
+     for row in logs:
+          for line in row:
+               print(line)
+     print("--- >>> saldo")
+elif (len(sys.argv) == 5 and sys.argv[1]=="sprzedaz"):
      logs.append(sys.argv[1:])
-     for x in logs:
-          for y in x:
-               print(y)
+     #subtract the item 
+     warehouse[prd_id] -= int(sys.argv[4])  
+     #add balance
+     balance += int(sys.argv[4]) * int(sys.argv[4])
+     #print logs
+     for row in logs:
+          for line in row:
+               print(line)
+     print("--- >>> sprzedaz")
 elif (len(sys.argv) == 5 and sys.argv[1]=="zakup"):
      logs.append(sys.argv[1:])
-     for x in logs:
-          for y in x:
-               print(y)
-
-     
-
-
-
-     # elif action == "konto":
-     #      print(f"\nSaldo wynosi: {balance}\n")
-     #      continue
-     # elif action == "magazyn":
-     #      if warehouse:
-     #           print("\nTowar w magazynie.\n")
-     #           for key in warehouse:
-     #                print(f"{key} - {warehouse[key]} sztuk" )
-     #      else:
-     #           print("\nMagazyn pusty.\n")
-     #      print(f"\nSaldo wynosi: {balance}\n")
-     #      continue
-     # elif action == "przeglad":
-     #      print(f"Liczba logów: {len(logs)} ")
-     #      first = int(input("Podaj nr pierwszej akcji: "))
-     #      last = int(input("Podaj nr ostaniej akcji: "))
-     #      print("\n")
-     #      if first < 1 or first > len(logs):
-     #           first = 1
-     #      if last > len(logs) or last < 1:
-     #           last = len(logs)
-     #      while first <= last:
-     #           print(f"Akcja nr {first} - {logs[first-1]}")
-     #           first += 1
-     #      continue
-# if (len(sys.argv) == 5 and sys.argv[1]=="sprzedaz") or warehouse :
-#      print("\nMagazyn jest pusty\n")
-#      exit()
-# elif (len(sys.argv) == 5 and sys.argv[1]=="zakup") or balance :
-#      print("\nBrak salda\n")
-#      exit()
-# elif (len(sys.argv) == 4 and sys.argv[1]=="saldo") or (len(sys.argv) == 2 and sys.argv[1]=="saldo"):
-#      logs.append(sys.argv[1:])
-#      balance = int(sys.argv[2])
+     #add the item 
+     warehouse[prd_id] += int(sys.argv[4])  
+     #add balance
+     balance -= int(sys.argv[4]) * int(sys.argv[4])
+     #print logs
+     for row in logs:
+          for line in row:
+               print(line)
+     print("--- >>> zakup")
+elif (len(sys.argv) == 2 and sys.argv[1]=="konto"):
+     print(f"\nSaldo wynosi: {balance}\n")
+     print("--- >>> konto")
+elif (len(sys.argv) > 1 and sys.argv[1] == "magazyn"):
+     logs.append(sys.argv[1:])
+     n = len(sys.argv)
+     print("Stan magazynu: ")
+     for i in range(2, n):
+          prd_id = sys.argv[i]
+          if prd_id in warehouse:
+               print(f"{prd_id} : {warehouse[prd_id]} sztuk" )
+          else:
+               print(f"{prd_id} : brak poyzcji w magazynie")
+     print("--- >>> magazyn")
+elif (len(sys.argv) == 4 and sys.argv[1]=="przeglad"):
+     logs.append(sys.argv[1:])
+     first = int(sys.argv[2])
+     last = int(sys.argv[3])
+     if first < 1 :
+          first = 1
+     if last > len(logs) :
+          last = len(logs)
+     while first <= last:
+          print(f"Akcja nr {first} - {logs[first-1]}")
+          first += 1
+     print("--- >>> przeglad")
+else:
+     print("\nKoniec")
+     exit()
